@@ -8,22 +8,25 @@ let user = {
 let requestPostConfig = {
     method: 'POST',
     headers: {
-        'Accept': 'aplication/json',
-        'Content-Type': 'aplication/json',
+        'Content-Type': 'application/json',
     },
     body: JSON.stringify(user)
 }
 
+
 function userRegister() {
-    fetch(baseUrl, requestConfig).then(
-        success => {
-            if(Response.ok) {
-                alert    
-            } else {   
-                if(success === 'El usuario ya se encuentra registrado') {
-                    alert("Usuario já registrado")
-                }
+    fetch(baseUrl, requestPostConfig).then(
+        response => {
+            if (!response.ok) {
+                alert("Requisição falhou!");
+                return
             }
+            if (response.status === 404) {
+                alert('não encontrou qualquer resultado')
+                return 
+            }
+            return response.json()
         }
     );
 }
+
