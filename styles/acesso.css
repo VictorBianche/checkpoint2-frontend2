@@ -48,6 +48,7 @@ input:focus {
 }
 
 label {
+  position: relative;
   width: 100%;
   font-weight: 300;
   margin-bottom: -.1em;
