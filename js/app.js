@@ -1,32 +1,93 @@
-let baseUrl = 'https://ctd-todo-api.herokuapp.com/v1/users';
-let user = {
-    firstName: document.querySelector('#name'),
-    lastName: document.querySelector('#surname'),
-    email: document.querySelector('#email'),
-    password: document.querySelector('password'),
+const baseUrl = 'https://ctd-todo-api.herokuapp.com/v1/users';
+const createUserButtonElement = document.querySelector('#createUserButton')
+const allInputsElements = document.querySelectorAll('input')
+
+createUserButtonElement.addEventListener('click', event => {
+
+    event.preventDefault()
+
+    createUser()
+
+})
+
+for(let input of allInputsElements) {
+
+    input.addEventListener('keyup', event => {
+
+        const inputValue = input.value
+        const inputId = input.id
+
+        formData[inputId] = inputValue
+
+        console.log(input.value)
+
+    })
+
 }
+
+var formData = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
+}
+
 let requestPostConfig = {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
     },
-    body: JSON.stringify(user)
 }
+function createUser() {
 
+    requestPostConfig.body = JSON.stringify(formData)
 
-function userRegister() {
-    fetch(baseUrl, requestPostConfig).then(
+      fetch(baseUrl, requestPostConfig).then(
+
         response => {
-            if (!response.ok) {
-                alert("Requisição falhou!");
-                return
-            }
-            if (response.status === 404) {
-                alert('não encontrou qualquer resultado')
-                return 
-            }
-            return response.json()
+
+            response.json().then(
+
+                info => {
+
+                    if(response.ok == true) {
+
+                        alert('Parabnes! Usuário criado com sucesso.')
+
+                    } else {
+
+                        if(info === 'El usuario ya se encuentra registrado') {
+
+                            alert('O e-mail digitado ja esta cadastrado')
+
+                        }
+
+                    }
+
+                }
+
+            )
+
         }
-    );
+
+    )
+
 }
 
+const formControlsElements = document.querySelectorAll('.form-control');
+
+for(let control of formControlsElements) {
+    
+    const controlInputElement = control.children[1];
+
+    controlInputElement.addEventListener('keyup', event => {
+        
+        let inputValid = event.target.checkValidaty();
+
+        if(inputValid) {
+            control.classList.remove('error')
+        } else {
+            control.classList.add('error')
+        }
+    })
+}
