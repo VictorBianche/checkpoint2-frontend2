@@ -1,4 +1,4 @@
-const loginBaseUrl = 'https://ctd-fe2-todo-v2.herokuapp.com/v1/users/login';
+const loginBaseUrl = 'http://ctd-fe2-todo-v2.herokuapp.com/v1/users/login';
 const loginBtn =  document.querySelector("#accessButton");
 const userInfo = document.querySelectorAll('input');
 
@@ -28,12 +28,13 @@ var info = {
 
 let loginRequestPostConfig = {
     method: 'POST',
-    Headers: {
+    headers: {
         'Content-Type': 'application/json',    
     }
 }
 
 function loginUser() {
+    
     loginRequestPostConfig.body = JSON.stringify(info);
 
         fetch(loginBaseUrl,loginRequestPostConfig).then(
