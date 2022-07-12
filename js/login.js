@@ -41,7 +41,11 @@ function loginUser() {
             response => {
                response.json().then(
                 info => {
-                    console.log(info);
+                    if(response.ok === true) {
+                        window.open(`${window.location.origin}/tarefas.html`, '_self');
+                        localStorage.setItem('jwt:', info.jwt);
+                        console.log(info.jwt);
+                    }
                 }
                )
             }
