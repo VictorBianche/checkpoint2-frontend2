@@ -1,4 +1,4 @@
-const baseUrl = 'https://ctd-todo-api.herokuapp.com/v1/users';
+const baseUrl = 'https://ctd-fe2-todo-v2.herokuapp.com/v1/users';
 const createUserButtonElement = document.querySelector('#createUserButton')
 const allInputsElements = document.querySelectorAll('input')
 
@@ -52,14 +52,14 @@ function createUser() {
 
                     if(response.ok == true) {
 
-                        alert('Parabnes! Usuário criado com sucesso.')
+                        alert('Parabens! Usuário criado com sucesso.')
 
                     } else {
 
                         if(info === 'El usuario ya se encuentra registrado') {
 
                             alert('O e-mail digitado ja esta cadastrado')
-
+                            console.log(response);
                         }
 
                     }

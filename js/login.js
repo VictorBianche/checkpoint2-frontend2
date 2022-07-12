@@ -1,4 +1,4 @@
-const loginBaseUrl = 'https://ctd-todo-api.herokuapp.com/v1/users/login';
+const loginBaseUrl = 'https://ctd-fe2-todo-v2.herokuapp.com/v1/users/login';
 const loginBtn =  document.querySelector("#accessButton");
 const userInfo = document.querySelectorAll('input');
 
@@ -10,14 +10,14 @@ loginBtn.addEventListener('click', event => {
 
 })
 
-for(input of userInfo) {
+for(let input of userInfo) {
     input.addEventListener('keyup', event => {
         const inputValue = input.value
         const inputID = input.id
 
         info[inputID] = inputValue
 
-        console.log(userInfo);
+        console.log(inputValue);
     })
 }
 
@@ -34,11 +34,11 @@ let loginRequestPostConfig = {
 }
 
 function loginUser() {
-    requestPostConfig.body = JSON.stringify(info);
+    loginRequestPostConfig.body = JSON.stringify(info);
 
         fetch(loginBaseUrl,loginRequestPostConfig).then(
             response => {
-                console.log(response);
+                console.log(loginRequestPostConfig);
             }
         )
 }
