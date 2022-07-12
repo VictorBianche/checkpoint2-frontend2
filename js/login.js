@@ -39,7 +39,11 @@ function loginUser() {
 
         fetch(loginBaseUrl,loginRequestPostConfig).then(
             response => {
-                console.log(loginRequestPostConfig);
+               response.json().then(
+                info => {
+                    console.log(info);
+                }
+               )
             }
         )
 }
