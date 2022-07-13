@@ -42,7 +42,7 @@ function loginUser() {
                response.json().then(
                 info => {
                     if(response.ok === true) {
-                        window.open(`./${window.location.origin}/tarefas.html`, '_self');
+                        window.open(`${window.location.origin}/tarefas.html`, '_self');
                         localStorage.setItem('jwt:', info.jwt);
                         console.log(info.jwt);
                     }

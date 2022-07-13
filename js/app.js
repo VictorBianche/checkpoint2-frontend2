@@ -53,7 +53,7 @@ function createUser() {
                     if(response.ok == true) {
 
                         alert('Parabens! Usuário criado com sucesso.')
-                        window.open(`./${window.location.origin}/index.html`, '_self')
+                        window.location.href = './../index.html'
 
                     } else {
 

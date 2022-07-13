@@ -1,4 +1,5 @@
-let token = localStorage.getItem('token')
+let token = localStorage.getItem('jwt')
+const nomeUsuario = document.getElementById('nomeUsuario')
 const apiUrl = 'https://ctd-fe2-todo-v2.herokuapp.com/v1'
 const createTaskButtonElement = document.querySelector('#createTaskButton')
 const skeletonElement = document.querySelector('#skeleton')
@@ -21,10 +22,7 @@ function getUserInfo() {
 
                     user => {
 
-                        console.log(user)
-                        console.log(`${user.firstName} ${user.lastName}`)
-
-                        // !Insira a lógica aqui para mostrar o Nome Completo do usuário no HTML da Aplicação
+                        nomeUsuario.innerHTML = user.firstName;
 
                     }
 
@@ -58,12 +56,30 @@ function getTasks() {
 
                     // Remoção dos itens que estavam antes dentro da Lista inicial
                     listTasks.innerHTML = ''
-
+                    
                     for(let task of tasks) {
-
+                        const dataFormatada = new Date(task.createdAt).toLocaleDateString(
+                            "pt-BR",
+                            {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                              hour: 'numeric',
+                              minute: 'numeric',
+                            }
+                          );
                         console.log(task)
 
-                        // !Construir a lógica de exibir as tarefas no html
+                        listTasks.innerHTML += `
+                        <li class="tarefa">
+                          <div class="not-done">${task.id}</div>
+                          <div class="descricao">
+                          <p class="nome">${task.description}</p>
+                          <p class="timestamp">Criada em: ${dataFormatada}</p>
+                          </div>
+                          <div class="close" onclick="deleteTask(${task.id})">X</div>
+                        </li>
+                        `;
 
                     }
 
@@ -84,7 +100,7 @@ function createTask() {
 
     // Objeto que será enviado para a API
     let data = {
-        description: 'Tarefa Teste',
+        description: document.querySelector("#novaTarefa").value,
         completed: false
     }
 
@@ -100,8 +116,32 @@ function createTask() {
         response => {
 
             if(response.ok) {
+                response.json().then(
+                    task => {
+                        const dataFormatada = new Date(task.createdAt).toLocaleDateString(
+                            "pt-BR",
+                            {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                              hour: 'numeric',
+                              minute: 'numeric',
+                            }
+                          );
+                        console.log(task)
 
-                // !Inserir Lógica para obter as Tarefas Novamente
+                        listTasks.innerHTML += `
+                        <li class="tarefa">
+                          <div class="not-done">${task.id}</div>
+                          <div class="descricao">
+                          <p class="nome">${task.description}</p>
+                          <p class="timestamp">Criada em: ${dataFormatada}</p>
+                          <div class="close" onclick="deleteTask(${task.id})">X</div>
+                          </div>
+                        </li>
+                        `;
+                    }
+                )
 
             }
 
@@ -111,6 +151,28 @@ function createTask() {
 
 }
 
+
+function deleteTask(id) {
+    let configuracaoRequisicao = {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: token,
+      },
+    };
+
+    fetch(`https://ctd-fe2-todo-v2.herokuapp.com/v1/tasks/${id}`, configuracaoRequisicao)
+      .then((response) => response.json())
+
+      .then(() => { 
+          getTasks()
+      })
+
+      .catch((err) => {
+          console.log(err);
+    });
+  
+}
 
 // Event Listener do Botão para criar Task
 createTaskButtonElement.addEventListener('click', event => {
