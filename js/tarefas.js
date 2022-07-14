@@ -24,7 +24,7 @@ function getUserInfo() {
                 )
             } else {
                 localStorage.clear()
-                window.location.href = './../index.html'
+                window.location.href = './index.html'
             }
         }
     )
@@ -219,6 +219,6 @@ if(token === null) {
 }
 
 finishSession.addEventListener('click', () => {
-  window.location.href = './../index.html'
+  window.location.href = './index.html'
   localStorage.clear();
 });
