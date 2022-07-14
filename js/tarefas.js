@@ -3,7 +3,9 @@ const nomeUsuario = document.getElementById('nomeUsuario')
 const apiUrl = 'https://ctd-fe2-todo-v2.herokuapp.com/v1'
 const createTaskButtonElement = document.querySelector('#createTaskButton')
 const skeletonElement = document.querySelector('#skeleton')
-const listTasks = document.querySelector('.tarefas-pendentes')
+const pendingTasks = document.querySelector('.tarefas-pendentes')
+const concludedTasks = document.querySelector('.tarefas-terminadas')
+const finishSession = document.querySelector('#closeApp')
 const headersAuthRequest = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
@@ -13,35 +15,20 @@ const headersAuthRequest = {
 function getUserInfo() {
 
     fetch('https://ctd-fe2-todo-v2.herokuapp.com/v1/users/getMe', { headers: headersAuthRequest }).then(
-
         response => {
-
             if(response.ok) {
-
                 response.json().then(
-
                     user => {
-
                         nomeUsuario.innerHTML = user.firstName;
-
                     }
-
                 )
-
             } else {
-
                 localStorage.clear()
                 window.location.href = './../index.html'
-
             }
-
         }
-
     )
-
 }
-
-
 
 // Função que Obtem as Tarefas
 function getTasks() {
@@ -55,7 +42,8 @@ function getTasks() {
                 tasks => {
 
                     // Remoção dos itens que estavam antes dentro da Lista inicial
-                    listTasks.innerHTML = ''
+                    pendingTasks.innerHTML = ''
+                    concludedTasks.innerHTML = ''
                     
                     for(let task of tasks) {
                         const dataFormatada = new Date(task.createdAt).toLocaleDateString(
@@ -68,19 +56,29 @@ function getTasks() {
                               minute: 'numeric',
                             }
                           );
-                        console.log(task)
-
-                        listTasks.innerHTML += `
-                        <li class="tarefa">
-                          <div class="not-done">${task.id}</div>
-                          <div class="descricao">
-                          <p class="nome">${task.description}</p>
-                          <p class="timestamp">Criada em: ${dataFormatada}</p>
-                          </div>
-                          <div class="close" onclick="deleteTask(${task.id})">X</div>
-                        </li>
-                        `;
-
+                        if(task.completed) {
+                          concludedTasks.innerHTML += `
+                            <li class="tarefa">
+                              <div onclick="updateTask(${task.id}, false)" class="not-done"></div>
+                              <div class="descricao">
+                              <p class="nome">${task.description}</p>
+                              <p class="timestamp">Criada em: ${dataFormatada}</p>
+                              <div class="close" onclick="deleteTask(${task.id})">X</div>
+                              </div>
+                            </li>
+                          `;
+                        }else{
+                          pendingTasks.innerHTML += `
+                            <li class="tarefa">
+                              <div onclick="updateTask(${task.id},true)" class="not-done"></div>
+                              <div class="descricao">
+                              <p class="nome">${task.description}</p>
+                              <p class="timestamp">Criada em: ${dataFormatada}</p>
+                              <div class="close" onclick="deleteTask(${task.id})">X</div>
+                              </div>
+                            </li>
+                          `;
+                        }
                     }
 
                 }
@@ -92,8 +90,6 @@ function getTasks() {
     )
 
 }
-
-
 
 // Função que Cria uma Task
 function createTask() {
@@ -128,11 +124,9 @@ function createTask() {
                               minute: 'numeric',
                             }
                           );
-                        console.log(task)
-
-                        listTasks.innerHTML += `
+                        pendingTasks.innerHTML += `
                         <li class="tarefa">
-                          <div class="not-done">${task.id}</div>
+                          <div onclick="updateTask(${task.id},true)" class="tarefas-terminadas">${task.id}</div>
                           <div class="descricao">
                           <p class="nome">${task.description}</p>
                           <p class="timestamp">Criada em: ${dataFormatada}</p>
@@ -142,7 +136,9 @@ function createTask() {
                         `;
                     }
                 )
-
+                .then(
+                  getTasks()
+                )  
             }
 
         }
@@ -150,7 +146,6 @@ function createTask() {
     )
 
 }
-
 
 function deleteTask(id) {
     let configuracaoRequisicao = {
@@ -165,7 +160,29 @@ function deleteTask(id) {
       .then((response) => response.json())
 
       .then(() => { 
-          getTasks()
+            getTasks()
+      })
+
+      .catch((err) => {
+          console.log(err);
+    });
+  
+}
+
+function updateTask(id, completedStatus) {
+    let updateHeader = {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({completed: completedStatus}),
+      };
+      fetch(`https://ctd-fe2-todo-v2.herokuapp.com/v1/tasks/${id}`, updateHeader)
+      .then((response) => response.json())
+
+      .then(() => {
+        getTasks()
       })
 
       .catch((err) => {
@@ -184,13 +201,11 @@ createTaskButtonElement.addEventListener('click', event => {
 
 })
 
-
-
 // Verificação se o Token Existe
 if(token === null) {
 
     // Caso o Token não Exista ele redireciona para o Index
-    window.location.href = './../index.html'
+    //window.location.href = './../index.html'
 
 } else {
 
@@ -202,3 +217,8 @@ if(token === null) {
     getTasks()
 
 }
+
+finishSession.addEventListener('click', () => {
+  window.location.href = './../index.html'
+  localStorage.clear();
+});
