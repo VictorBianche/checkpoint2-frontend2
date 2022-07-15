@@ -16,13 +16,8 @@ for(let input of allInputsElements) {
 
         const inputValue = input.value
         const inputId = input.id
-
         formData[inputId] = inputValue
-
-        console.log(input.value)
-
     })
-
 }
 
 var formData = {
@@ -38,7 +33,12 @@ let requestPostConfig = {
         'Content-Type': 'application/json',
     },
 }
+
 function createUser() {
+
+    if(validate > 0) {
+        return false
+    }
 
     requestPostConfig.body = JSON.stringify(formData)
 
@@ -51,44 +51,17 @@ function createUser() {
                 info => {
 
                     if(response.ok == true) {
-
                         alert('Parabens! Usuário criado com sucesso.')
                         window.location.href = './index.html'
 
                     } else {
-
                         if(info === 'El usuario ya se encuentra registrado') {
-
                             alert('O e-mail digitado ja esta cadastrado')
                             console.log(response);
                         }
-
                     }
 
-                }
-
-            )
-
+                })
         }
-
     )
-
-}
-
-const formControlsElements = document.querySelectorAll('.form-control');
-
-for(let control of formControlsElements) {
-    
-    const controlInputElement = control.children[1];
-
-    controlInputElement.addEventListener('keyup', event => {
-        
-        let inputValid = event.target.checkValidaty();
-
-        if(inputValid) {
-            control.classList.remove('error')
-        } else {
-            control.classList.add('error')
-        }
-    })
 }

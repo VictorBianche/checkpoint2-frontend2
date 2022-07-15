@@ -22,3 +22,17 @@ button {
   border-radius: 3px;
   cursor: pointer;
 }
+
+.form-control small {
+  color: rgb(218, 46, 46);
+  opacity: 0;
+}
+
+.form-control.error small {
+  opacity: 1;
+}
+
+.form-control.error input {
+  background-color: rgb(240, 0, 0);
+  border: 1px solid rgb(218, 46, 46);
+}

@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="styles/acesso.css">
 
   <!-- ---------------------- lógica aplicada no registro -------------------- -->
-  
+
 </head>
 
 <body>
@@ -25,32 +25,47 @@
         <p>To-Do App</p>
       </div>
 
-      <label>
-        Nome:
-        <input type="text" id="firstName">
-      </label>
-      <label>
-        Sobrenome:
-        <input type="text" id="lastName">
-      </label>
-      <label>
-        Email:
-        <input type="email" id="email">
-      </label>
-      <label>
-        Senha:
-        <input type="password" id="password">
-      </label>
-      <label>
-        Repetir senha:
-        <input type="password">
-      </label>
+      <div class="form-control"> 
+        <label for="firstName">Nome:</label>
+        <input type="text" id="firstName" minlength="3" required>
+        <small>Forneça um nome válido</small>
+      </div>
+
+      <div class="form-control"> 
+        <label for="lastName">Sobrenome:</label>
+        <input type="text" id="lastName" minlength="5" required>
+        <small>Forneça um sobrenome válido</small>
+      </div>
+
+      <div class="form-control"> 
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <small>Forneça um e-mail válido</small>
+      </div>
+
+      <div class="form-control"> 
+        <label for="password">Senha:</label>
+        <input type="password" id="password" minlength="6" maxlength="15" required>
+        <small>Forneça uma senha válida</small>
+      </div>
+
+      <div class="form-control"> 
+        <label for="ola">Repetir senha:</label>
+        <input type="password" id="confirmPassword" minlength="6" maxlength="15" required>
+        <small>Repita a senha</small>
+      </div>
+
       <button id='createUserButton'>Criar conta</button>
+
     </form>
+
     <div class="ingressar">
       <a href="index.html">Já possui conta? Acesse aqui</a>
     </div>
+
   </div>
+
+  <script src="./js/validate.js"></script>
   <script src="./js/app.js"></script>
 </body>
 
