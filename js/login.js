@@ -5,7 +5,7 @@ const userInfo = document.querySelectorAll('input');
 loginBtn.addEventListener('click', event => {
 
     event.preventDefault()
-
+    // mostrarSpinner()
     loginUser()
 
 })
@@ -42,6 +42,7 @@ function loginUser() {
                response.json().then(
                 info => {
                     if(response.ok === true) {
+                        // ocultarSpinner()
                         window.open(`./tarefas.html`, '_self');
                         localStorage.setItem('jwt', info.jwt);
                         console.log(info.jwt);

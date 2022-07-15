@@ -5,8 +5,9 @@ const allInputsElements = document.querySelectorAll('input')
 createUserButtonElement.addEventListener('click', event => {
 
     event.preventDefault()
-
+    // mostrarSpinner()
     createUser()
+   
 
 })
 
@@ -36,6 +37,8 @@ let requestPostConfig = {
 
 function createUser() {
 
+    
+
     if(validate > 0) {
         return false
     }
@@ -51,12 +54,23 @@ function createUser() {
                 info => {
 
                     if(response.ok == true) {
-                        alert('Parabens! Usuário criado com sucesso.')
+                        // ocultarSpinner();
+                        Swal.fire('Parabéns!', 
+                        'Usuário criado com sucesso.',
+                        'sucess')
                         window.location.href = './index.html'
 
                     } else {
                         if(info === 'El usuario ya se encuentra registrado') {
-                            alert('O e-mail digitado ja esta cadastrado')
+                            // ocultarSpinner();
+                            Swal.fire({
+                                title: 'Atenção',
+                                text: 'O e-mail digitado já esta cadastrado',
+                                icon: 'warning',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                              })
                             console.log(response);
                         }
                     }
@@ -65,3 +79,7 @@ function createUser() {
         }
     )
 }
+
+
+
+  
